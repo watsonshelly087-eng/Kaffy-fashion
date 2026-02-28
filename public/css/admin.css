@@ -1,0 +1,35 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fffdf8;
+  color: #333;
+  padding: 30px;
+}
+
+header {
+  text-align: center;
+  color: #d4af37;
+  margin-bottom: 30px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th {
+  background: #f8f5f0;
+  color: #444;
+  padding: 12px;
+  border-bottom: 2px solid #d4af37;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background: #fff7e6;
+}

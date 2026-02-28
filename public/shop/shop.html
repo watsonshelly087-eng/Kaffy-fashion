@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KaffySeni Shop</title>
+  <link rel="stylesheet" href="/css/shop.css">
+</head>
+<body>
+  <header>
+    <div class="logo">KaffySeni</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/shop" class="active">Shop</a>
+      <a href="/contact">Contact</a>
+      <div class="cart-icon" id="cartBtn">🛍️ <span id="cartCount">0</span></div>
+    </nav>
+  </header>
+
+  <h2 class="section-title">Our Collection</h2>
+
+  <div class="product-grid" id="productGrid">
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246" alt="Ankara Dress">
+      <h3>Royal Ankara Dress</h3>
+      <p class="price">₦25,000</p>
+      <p class="desc">Elegant Ankara gown with gold details.</p>
+      <button class="add-btn" onclick="addToCart('Royal Ankara Dress', 25000)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c" alt="Men's Agbada">
+      <h3>Men’s Agbada</h3>
+      <p class="price">₦40,000</p>
+      <p class="desc">Classic agbada with modern embroidery.</p>
+      <button class="add-btn" onclick="addToCart('Men’s Agbada', 40000)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Beaded Gown">
+      <h3>Beaded Gown</h3>
+      <p class="price">₦55,000</p>
+      <p class="desc">Luxury beaded evening gown for special events.</p>
+      <button class="add-btn" onclick="addToCart('Beaded Gown', 55000)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1535509032533-7a157d4f0bff" alt="Casual Set">
+      <h3>Casual Two-Piece Set</h3>
+      <p class="price">₦18,000</p>
+      <p class="desc">Comfortable two-piece outfit for daily wear.</p>
+      <button class="add-btn" onclick="addToCart('Casual Two-Piece Set', 18000)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1544717302-de2939b7ef71" alt="Lace Dress">
+      <h3>Lace Dress</h3>
+      <p class="price">₦35,000</p>
+      <p class="desc">Chic lace dress with intricate patterns.</p>
+      <button class="add-btn" onclick="addToCart('Lace Dress', 35000)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246" alt="Kente Fabric">
+      <h3>Kente Fabric Wrap</h3>
+      <p class="price">₦15,000</p>
+      <p class="desc">Vibrant kente fabric perfect for creative styling.</p>
+      <button class="add-btn" onclick="addToCart('Kente Fabric Wrap', 15000)">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <h3>Your Cart</h3>
+      <div id="cartItems"></div>
+      <div class="cart-footer">
+        <button onclick="checkout()">Checkout</button>
+        <button onclick="closeCart()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+    const cartModal = document.getElementById('cartModal');
+    const cartBtn = document.getElementById('cartBtn');
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      cartCount.textContent = cart.length;
+    }
+
+    cartBtn.addEventListener('click', () => {
+      cartModal.classList.add('open');
+      displayCart();
+    });
+
+    function closeCart() {
+      cartModal.classList.remove('open');
+    }
+
+    function displayCart() {
+      cartItems.innerHTML = '';
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <span>${item.name}</span>
+            <span>₦${item.price.toLocaleString()}</span>
+            <button onclick="removeItem(${index})">x</button>
+          </div>`;
+      });
+      cartItems.innerHTML += `<p><strong>Total: ₦${total.toLocaleString()}</strong></p>`;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      cartCount.textContent = cart.length;
+      displayCart();
+    }
+
+    function checkout() {
+      alert('Thank you for shopping at KaffySeni! Payment processing coming soon.');
+      cart = [];
+      cartCount.textContent = 0;
+      closeCart();
+    }
+  </script>
+</body>
+</html>

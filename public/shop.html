@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KaffySeni Shop</title>
+  <link rel="stylesheet" href="/css/shop.css">
+</head>
+<body>
+  <header>
+    <div class="logo">KaffySeni</div>
+<nav>
+  <a href="/">🏠 Home</a>
+  <a href="/shop">🛍️ Shop</a>
+  <a href="/dashboard">📊 Dashboard</a>
+  <a href="/logout">🚪 Logout</a>
+  <a href="/cart" class="btn">🛒 View Cart</a>
+</nav>
+  </header>
+
+  <h2 class="section-title">Our Collection</h2>
+
+ <section class="shop-section">
+  <h2>Our Products</h2>
+  <div id="shopGrid" class="product-grid"></div>
+</section>
+
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <h3>Your Cart</h3>
+      <div id="cartItems"></div>
+      <div class="cart-footer">
+        <button onclick="checkout()">Checkout</button>
+        <button onclick="closeCart()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🛒 Cart Section -->
+<section id="cart-section" style="background:#fffaf5; padding:40px 20px;">
+  <div style="max-width:900px; margin:auto;">
+    <h2 style="color:#d4a017; text-align:center;">Your Cart</h2>
+    <div id="cart-items" style="margin-top:20px;"></div>
+
+    <div style="text-align:center; margin-top:30px;">
+      <h3>Total: ₦<span id="cart-total">0</span></h3>
+      <button id="checkout-btn"
+        style="background:#d4a017;color:white;border:none;padding:12px 30px;border-radius:25px;font-size:16px;cursor:pointer;">
+        Checkout
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartSummary = document.getElementById("cart-summary");
+  const cartCount = document.getElementById("cart-count");
+  const cartTotal = document.getElementById("cart-total");
+
+  function updateCartDisplay() {
+    let total = 0;
+    let count = 0;
+
+    cart.forEach(item => {
+      total += item.price * item.quantity;
+      count += item.quantity;
+    });
+
+    if (cartCount) cartCount.textContent = count;
+    if (cartTotal) cartTotal.textContent = `₦${total.toLocaleString()}`;
+  }
+
+  window.addToCart = function(id, name, price, image) {
+    price = parseFloat(price) || 0;
+    const existing = cart.find(item => item.id === id);
+
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({ id, name, price, image, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showToast(`${name} added to cart!`);
+    updateCartDisplay();
+  };
+
+  function showToast(message) {
+    let toast = document.createElement("div");
+    toast.textContent = message;
+    toast.className = "toast";
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 300);
+    }, 2500);
+  }
+
+  updateCartDisplay();
+});
+</script>
+
+<script>
+async function loadProducts() {
+  const res = await fetch("/products");
+  const products = await res.json();
+
+  const container = document.querySelector(".product-grid");
+  container.innerHTML = "";
+
+  products.forEach(p => {
+    const item = `
+      <div class="product-card">
+        <img src="${p.image}" alt="${p.name}" />
+        <h3>${p.name}</h3>
+        <p>₦${p.price.toLocaleString()}</p>
+        <button onclick="addToCart(${p.id}, '${p.name}', ${p.price}, '${p.image}')">Add to Cart</button>
+      </div>
+    `;
+    container.insertAdjacentHTML("beforeend", item);
+  });
+}
+
+window.onload = loadProducts;
+</script>
+
+
+<style>
+.toast {
+  visibility: hidden;
+  min-width: 240px;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  border-radius: 10px;
+  padding: 14px 18px;
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  transition: all 0.4s ease;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+#cart-summary {
+  background: #fff;
+  margin-top: 50px;
+  padding: 20px;
+  border-top: 2px solid #ddd;
+  text-align: center;
+  border-radius: 8px;
+}
+#cart-summary h3 {
+  font-size: 20px;
+  color: #333;
+}
+#cart-summary p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+#cart-summary a {
+  display: inline-block;
+  margin-top: 10px;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+#cart-summary a:hover {
+  background: #333;
+}
+</style>
+
+<div id="cart-summary">
+  <h3>Your Cart Summary</h3>
+  <p>Items in Cart: <span id="cart-count">0</span></p>
+  <p>Total: <span id="cart-total">₦0</span></p>
+  <a href="/cart">Go to Cart</a>
+</div>
+</body>
+</html>

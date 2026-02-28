@@ -1,0 +1,27 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f9;
+  text-align: center;
+}
+.container {
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+input, button {
+  margin: 10px;
+  padding: 8px;
+  width: 90%;
+}
+button {
+  background: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background: #555;
+}

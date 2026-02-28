@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - Kaffyseni</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Dashboard</h2>
+    <p>Welcome! Schedule your report:</p>
+    <input id="template" placeholder="Report Template"><br>
+    <label><input type="checkbox" id="pdf"> PDF</label>
+    <label><input type="checkbox" id="docx"> DOCX</label>
+    <label><input type="checkbox" id="csv"> CSV</label><br>
+    <button onclick="saveReport()">Save Report</button>
+    <h3>Your History</h3>
+    <table id="historyTable" border="1">
+      <thead>
+        <tr><th>Time</th><th>Template</th><th>Formats</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

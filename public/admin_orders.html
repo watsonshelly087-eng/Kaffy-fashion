@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KaffySeni Orders</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header>
+    <h2>KaffySeni — All Orders</h2>
+  </header>
+
+  <main>
+    <table id="ordersTable">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total (₦)</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script>
+    async function loadOrders() {
+      const res = await fetch('/admin/orders');
+      const orders = await res.json();
+      const tbody = document.querySelector('#ordersTable tbody');
+      tbody.innerHTML = '';
+      orders.forEach(o => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${o.id}</td>
+            <td>${o.customer_name}</td>
+            <td>${o.items}</td>
+            <td>₦${o.total.toLocaleString()}</td>
+            <td>${new Date(o.created_at).toLocaleString()}</td>
+          </tr>
+        `;
+      });
+    }
+    loadOrders();
+  </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart | KaffySeni</title>
+  <link rel="stylesheet" href="/cart.css" />
+  <style>
+    /* fallback inline style in case cart.css isn't loaded */
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #fffaf5;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .cart-container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #c19a6b;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .cart-item img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      margin-right: 20px;
+      object-fit: cover;
+    }
+
+    .cart-item h3 {
+      margin: 0;
+      color: #222;
+    }
+
+    .cart-item p {
+      margin: 5px 0;
+      color: #777;
+    }
+
+    #cart-total {
+      text-align: right;
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #000;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      background: #c19a6b;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .checkout-btn:hover {
+      background: #a97f50;
+    }
+  </style>
+</head>
+<body>
+  <div class="cart-container">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <h2 id="cart-total">Total: ₦0</h2>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+  </div>
+
+  <script>
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsDiv = document.getElementById("cart-items");
+      const cartTotal = document.getElementById("cart-total");
+
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+        cartTotal.textContent = "Total: ₦0";
+        return;
+      }
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        const itemHTML = `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" />
+            <div>
+              <h3>${item.name}</h3>
+              <p>₦${item.price.toLocaleString()} × ${item.quantity} = ₦${itemTotal.toLocaleString()}</p>
+            </div>
+          </div>
+        `;
+        cartItemsDiv.insertAdjacentHTML("beforeend", itemHTML);
+      });
+
+      cartTotal.textContent = "Total: ₦" + total.toLocaleString();
+    }
+
+async function checkout() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart.length === 0) {
+    alert("🛒 Your cart is empty!");
+    return;
+  }
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const name = prompt("Enter your name:");
+  const email = prompt("Enter your email:");
+
+  const response = await fetch("/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ customer_name: name, customer_email: email, cart, total }),
+  });
+
+  const data = await response.json();
+
+  if (data.success) {
+    alert(`✅ Order placed successfully! Total: ₦${total.toLocaleString()}`);
+    localStorage.removeItem("cart");
+    window.location.href = "/shop";
+  } else {
+    alert("❌ Failed to place order. Please try again.");
+  }
+}
+
+
+    window.onload = loadCart;
+  </script>
+</body>
+</html>

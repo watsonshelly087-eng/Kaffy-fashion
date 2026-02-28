@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KaffySeni Dashboard</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+  <header>
+    <h1>Welcome to Your KaffySeni Dashboard</h1>
+    <nav>
+      <a href="/">🏠 Home</a>
+      <a href="/shop">🛍️ Shop</a>
+      <a href="/reports">📊 Reports</a>
+      <a href="/logout">🚪 Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <h2>Hello, dear customer!</h2>
+      <p>From here, you can schedule your fashion reports, view updates, and order products.</p>
+      <a href="/shop" class="btn-shop">Go to Shop</a>
+    </section>
+  </main>
+  <script>
+fetch('/api/user')
+  .then(res => res.json())
+  .then(data => {
+    if (data.name) {
+      document.querySelector('#user-name').textContent = data.name;
+    }
+  });
+</script>
+</body>
+</html>
