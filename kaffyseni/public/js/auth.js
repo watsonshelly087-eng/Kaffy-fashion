@@ -1,3 +1,12 @@
+import { supabase } from './supabaseClient.js';
+
+// Example: GitHub login
+document.getElementById('loginButton').addEventListener('click', async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'github' });
+  if (error) console.error(error);
+  else console.log("Redirecting to GitHub login...", data);
+});
+
 async function signup() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;

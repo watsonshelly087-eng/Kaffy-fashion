@@ -1,3 +1,11 @@
+import { supabase } from './supabaseClient.js';
+
+// Example: get logged-in user
+async function getUser() {
+  const { data } = await supabase.auth.getUser();
+  console.log("Logged-in user:", data.user);
+}
+getUser();
 const token = localStorage.getItem("token");
 
 async function saveReport() {
