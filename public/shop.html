@@ -22,6 +22,7 @@
 
  <section class="shop-section">
   <h2>Our Products</h2>
+  <div id="products"></div>
   <div id="shopGrid" class="product-grid"></div>
 </section>
 
@@ -130,6 +131,39 @@ async function loadProducts() {
 window.onload = loadProducts;
 </script>
 
+<script type="module">
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+const supabase = createClient(
+"https://aklzhhjywmkngtrieolp.supabase.co",
+"YOUR_ANON_KEY"
+)
+
+async function loadProducts(){
+
+const { data, error } = await supabase
+.from("products")
+.select("*")
+
+console.log(data)
+console.log(error)
+
+const container = document.getElementById("products")
+
+container.innerHTML = data.map(p => `
+<div>
+<img src="${p.image}" width="200">
+<h3>${p.name}</h3>
+<p>₦${p.price}</p>
+</div>
+`).join("")
+
+}
+
+loadProducts()
+
+</script>
 
 <style>
 .toast {

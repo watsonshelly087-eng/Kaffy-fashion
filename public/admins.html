@@ -1,0 +1,31 @@
+<input id="name" placeholder="Product Name">
+<input id="price" placeholder="Price">
+<input id="image" placeholder="Image URL">
+<textarea id="description"></textarea>
+
+
+<script type="module">
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+const supabase = createClient(
+"https://aklzhhjywmkngtrieolp.supabase.co",
+"YOUR_ANON_KEY"
+)
+
+window.addProduct = async function(){
+
+const name = document.getElementById("name").value
+const price = document.getElementById("price").value
+const image = document.getElementById("image").value
+const description = document.getElementById("description").value
+
+await supabase
+.from("products")
+.insert([{ name, price, image, description }])
+
+alert("Product added!")
+
+}
+
+</script>

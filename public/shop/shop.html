@@ -19,6 +19,8 @@
 
   <h2 class="section-title">Our Collection</h2>
 
+  <div id="products"></div>
+
   <div class="product-grid" id="productGrid">
     <div class="product-card">
       <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246" alt="Ankara Dress">
@@ -130,5 +132,35 @@
       closeCart();
     }
   </script>
+
+  <script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+const supabase = createClient(
+"https://aklzhhjywmkngtrieolp.supabase.co",
+"YOUR_ANON_KEY"
+)
+
+async function loadProducts() {
+
+const { data } = await supabase
+.from("products")
+.select("*")
+
+const container = document.getElementById("products")
+
+container.innerHTML = data.map(p => `
+<div class="product">
+<img src="${p.image}" width="200"/>
+<h3>${p.name}</h3>
+<p>₦${p.price}</p>
+<button onclick="addToCart('${p.id}')">Add to Cart</button>
+</div>
+`).join("")
+
+}
+
+loadProducts()
+</script>
 </body>
 </html>
