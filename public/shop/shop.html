@@ -143,24 +143,40 @@ const supabase = createClient(
 
 async function loadProducts() {
 
-const { data } = await supabase
-.from("products")
-.select("*")
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
 
+  console.log("DATA:", data)
+  console.log("ERROR:", error)
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  const container = document.getElementById("products")
+
+  container.innerHTML = data.map(p => `
+    <div class="product">
+      <img src="${p.image}" width="200">
+      <h3>${p.name}</h3>
+      <p>₦${p.price}</p>
+    </div>
+  `).join("")
+}
+
+loadProducts()
 const container = document.getElementById("products")
 
 container.innerHTML = data.map(p => `
 <div class="product">
-<img src="${p.image}" width="200"/>
-<h3>${p.name}</h3>
-<p>₦${p.price}</p>
-<button onclick="addToCart('${p.id}')">Add to Cart</button>
+  <img src="${p.image}" width="200">
+  <h3>${p.name}</h3>
+  <p>₦${p.price}</p>
 </div>
 `).join("")
-
 }
-
-loadProducts()
 </script>
 </body>
 </html>
